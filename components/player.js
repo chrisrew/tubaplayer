@@ -1,11 +1,12 @@
 import React from 'react'
 import SongList from './songList'
-import { SafeAreaView, AppState, AsyncStorage, View, Text, StyleSheet, TouchableHighlight, StatusBar } from 'react-native'
+import { AsyncStorage, SafeAreaView, AppState, View, Text, StyleSheet, TouchableHighlight, StatusBar } from 'react-native'
 import { createStackNavigator } from '@react-navigation/stack'
-import Icon from 'react-native-vector-icons/FontAwesome';
+import Icon from 'react-native-vector-icons/FontAwesome'
 import Upload from './upload'
-import Slider from '@react-native-community/slider'
-import tp from 'react-native-track-player';
+//import Progress from './progress'
+//import AsyncStorage from '@react-native-community/async-storage'
+import tp from 'react-native-track-player'
 
 const Stack = createStackNavigator();
 
@@ -41,9 +42,9 @@ function Player(props){
 	const stop = async () => { tp.stop(); setPlaying(false)} // so.stopAsync();
 	const pause = async () => {tp.pause(); setPlaying(false)} // so.pauseAsync(); 
 
-	//backward = async () => this.state.so.pauseAsync()
-	const forward = async () => loadSong(getNewSong())
-	const repeat = async () => {tp.pause()} // so.pauseAsync()
+	//const backwards = async () => tp.skipToPrevious()
+	const forward = async () => tp.skipToNext()
+	//const repeat = async () => {tp.pause()} // so.pauseAsync()
 	//random = async () => this.state.so.pauseAsync()
 	const setTrack = v => { tp.seekTo(v/1000); setSliding(false); setTrackPos(v)} // so.setPositionAsync(v);
 	// this[name]
@@ -59,12 +60,12 @@ function Player(props){
 	const inite = async () => {
 		await tp.setupPlayer({})
 		await tp.updateOptions({
-			stopWithApp: false,
+			stopWithApp: true,
 			capabilities: [
 				tp.CAPABILITY_PLAY,
 				tp.CAPABILITY_PAUSE,
-				tp.CAPABILITY_SKIP_TO_NEXT,
-				tp.CAPABILITY_SKIP_TO_PREVIOUS,
+				//tp.CAPABILITY_SKIP_TO_NEXT,
+				//tp.CAPABILITY_SKIP_TO_PREVIOUS,
 				tp.CAPABILITY_STOP
 			],
 			compactCapabilities: [
@@ -73,23 +74,17 @@ function Player(props){
 			]
 		})
 		await tp.add(songs.map(s => {
-			const uri = `https://tuba.work/users/${user}/${song}`
+			const uri = `https://tuba.work/users/${user}/${s}`
 			return { ...t, id:s, title: s, uri: uri}
 		}))
-		
-		tp.play() // return shuffled songs
+		setMusic(songs[0])
+		tp.play() 
+		setPlaying(true)
 	}
 
 	const loadSong = async song => {
 		if(song){
-			try {
-				setMusic(song)
-				const uri = `https://tuba.work/users/${user}/${song}`
-				let track = {id: song, url: uri, title: song, ...t}
-				await tp.add([track])
-				tp.play()
-				setPlaying(true)
-			} catch (error) { console.log(error) }
+			tp.skip(song)
 		}
 	}
 
@@ -118,11 +113,7 @@ function Player(props){
 			{!songs.length ? ( <Upload /> ) : (
 				<View style={styles.container}>
 					<Text style={styles.container}>{music}</Text>
-					<Slider style={styles.container} 
-						onValueChange={() => !sliding ? setSliding(true) : true}
-						onSlidingComplete={v => setTrack(v)} 
-						value={trackPos}
-						maximumValue={maxPos} />
+					
 					<View style={styles.icons}>
 						<View style={styles.iconContainer}>
 							{playing ? icon(pause) : icon(play)} 
@@ -135,6 +126,7 @@ function Player(props){
 			<SongList songList={songs} navigation={navigation} play={loadSong}/>
 		</SafeAreaView>)
 }
+// <Progress ss={setSliding} s={sliding} />
 
 export default Player
 

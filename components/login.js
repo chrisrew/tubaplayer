@@ -1,5 +1,6 @@
 import React from 'react'
-import { SafeAreaView, View, Text, TextInput, Button, AsyncStorage, StyleSheet, StatusBar} from 'react-native'
+import { AsyncStorage, SafeAreaView, View, Text, TextInput, Button, StyleSheet, StatusBar} from 'react-native'
+//import AsyncStorage from '@react-native-community/async-storage'
 import api from './api'
 
 class Login extends React.Component {

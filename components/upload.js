@@ -1,5 +1,6 @@
 import React from 'react'
-import { SafeAreaView, Button, StyleSheet, Text, AsyncStorage, ActivityIndicator } from 'react-native'
+import { AsyncStorage, SafeAreaView, Button, StyleSheet, Text, ActivityIndicator } from 'react-native'
+//import AsyncStorage from '@react-native-community/async-storage'
 import Api from './api'
 //import * as DocumentPicker from 'expo-document-picker';
 
