@@ -1,6 +1,5 @@
-import tp from 'react-native-track-player';
 
-module.exports = async function() {
+module.exports = tp => async function() {
     // now working!
     tp.addEventListener('remote-play', () => tp.play());
     tp.addEventListener('remote-pause', () => tp.pause());

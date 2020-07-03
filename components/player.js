@@ -6,11 +6,11 @@ import Icon from 'react-native-vector-icons/FontAwesome'
 import Upload from './upload'
 //import Progress from './progress'
 //import AsyncStorage from '@react-native-community/async-storage'
-import tp from 'react-native-track-player'
+//import tp from 'react-native-track-player'
 
 const Stack = createStackNavigator();
 
-function Player(props){
+const Player = (tp) => (props) => {
 
 	const {useState, useEffect} = React
 	const {navigation} = props

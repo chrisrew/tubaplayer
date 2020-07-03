@@ -27,6 +27,7 @@ class Api {
 	async getToken(body){
 		let result
 		try{
+			console.log(`jwt`)
 			const response = await fetch(`https://tuba.work/jwt`, {
 				method: 'POST',
 				headers: {'Accept': 'application/json',
@@ -53,6 +54,7 @@ class Api {
 
 	async isValid(face_user){
 		let result
+		console.log(`valid`)
 		const url = `https://graph.facebook.com/debug_token?`+
 						`input_token=${face_user.accessToken}`+
 						`&access_token=${face_user.accessToken}`

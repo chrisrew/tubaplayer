@@ -22,7 +22,7 @@ const Logout = ({navigation}) => {
 const Stack = createStackNavigator()
 const Drawer = createDrawerNavigator()
 
- const App = () => {
+ const App = (tp) => () => {
   const defaultOption = {
     headerTintColor: '#00ff00',
     headerStyle: {
@@ -70,7 +70,7 @@ const Drawer = createDrawerNavigator()
             ),
           })} />
           <Stack.Screen name="Signup" component={Signup} options={defaultOption} />
-          <Stack.Screen name="Profile" component={Player} />
+          <Stack.Screen name="Profile" component={Player(tp)} />
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>
