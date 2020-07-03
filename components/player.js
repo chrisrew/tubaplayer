@@ -1,12 +1,10 @@
 import React from 'react'
 import SongList from './songList'
-import { SafeAreaView, AppState, AsyncStorage, View, Text, StyleSheet, Slider, TouchableHighlight, StatusBar } from 'react-native'
+import { SafeAreaView, AppState, AsyncStorage, View, Text, StyleSheet, TouchableHighlight, StatusBar } from 'react-native'
 import { createStackNavigator } from '@react-navigation/stack'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Upload from './upload'
-// https://github.com/tanguyantoine/react-native-music-control
-// import mc from 'react-native-music-control';
-// https://react-native-track-player.js.org/getting-started/
+import Slider from '@react-native-community/slider'
 import tp from 'react-native-track-player';
 
 const Stack = createStackNavigator();
@@ -58,17 +56,15 @@ function Player(props){
 		return songs[Math.floor(Math.random()*len)]
 	}
 
-	let toRemove
-
-	const loadSong = async song => {
+	const inite = async () => {
 		await tp.setupPlayer({})
 		await tp.updateOptions({
-			stopWithApp: true,
+			stopWithApp: false,
 			capabilities: [
 				tp.CAPABILITY_PLAY,
 				tp.CAPABILITY_PAUSE,
-				//tp.CAPABILITY_SKIP_TO_NEXT,
-				//tp.CAPABILITY_SKIP_TO_PREVIOUS,
+				tp.CAPABILITY_SKIP_TO_NEXT,
+				tp.CAPABILITY_SKIP_TO_PREVIOUS,
 				tp.CAPABILITY_STOP
 			],
 			compactCapabilities: [
@@ -76,6 +72,15 @@ function Player(props){
 				tp.CAPABILITY_PAUSE
 			]
 		})
+		await tp.add(songs.map(s => {
+			const uri = `https://tuba.work/users/${user}/${song}`
+			return { ...t, id:s, title: s, uri: uri}
+		}))
+		
+		tp.play() // return shuffled songs
+	}
+
+	const loadSong = async song => {
 		if(song){
 			try {
 				setMusic(song)
@@ -100,7 +105,7 @@ function Player(props){
 	
 	useEffect(() => {
 		setMounted(true)
-		loadSong(getNewSong())
+		inite()
 		return function cleanup(){ 
 			setMounted(false)
 		}
